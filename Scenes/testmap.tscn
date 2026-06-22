@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://5jr8nms8fxmv"]
+
+[ext_resource type="Script" uid="uid://cngq0m6pwxdb3" path="res://Scenes/testmap.gd" id="1_2bldp"]
+[ext_resource type="PackedScene" uid="uid://bpnt0yvbysdow" path="res://PraxisMapper/Controls/ScrollingCenteredMap2.tscn" id="1_2ynb8"]
+
+[node name="testmap" type="Node2D" unique_id=1899921033]
+script = ExtResource("1_2bldp")
+
+[node name="ScrollingCenteredMap" parent="." unique_id=1439201203 instance=ExtResource("1_2ynb8")]
+visible = false
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1077.0
+offset_bottom = 1917.0
+
+[node name="ScrollingCenteredMap2" parent="." unique_id=60280711 instance=ExtResource("1_2ynb8")]
+offset_left = 16.0
+offset_top = 3.0
+offset_right = 1080.0
+offset_bottom = 1591.0
