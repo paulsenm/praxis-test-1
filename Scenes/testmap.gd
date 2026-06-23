@@ -37,17 +37,19 @@ func test_gen_dots(cell8 = null, gridSize = null):
 		spritePoint.set_meta('location', new_pluscode)
 		var data_test = point[0]
 		
+		var random_resource = test_resource_names.pick_random()
+		
 		var spritePointBtn = Button.new()
 		var scaled_size = spritePoint.texture.get_size() * spritePoint.scale
 		spritePointBtn.size = scaled_size	
 		spritePointBtn.position = -scaled_size / 2.0
-		spritePointBtn.pressed.connect(test_resource_click.bind(data_test, spritePointBtn))
+		spritePointBtn.pressed.connect(test_resource_click.bind(data_test, spritePointBtn, random_resource))
 				
 		var spritePointCol = CollisionShape2D.new()
 		var spritePointColShape = RectangleShape2D.new()
 		spritePointColShape.size = scaled_size
 		spritePointCol.shape = spritePointColShape
-		
+				
 		spritePoint.add_child(spritePointCol)
 		spritePoint.add_child(spritePointBtn)
 		pluscodes_to_display.append(spritePoint)
@@ -56,7 +58,8 @@ func test_gen_dots(cell8 = null, gridSize = null):
 	return pluscodes_to_display
 	
 
-func test_resource_click(test_data, resourceBtn):
+	
+func test_resource_click(test_data, resourceBtn, attached_resource):
 	#var player = $playerIndicator
 	var player_position = player.global_position
 	var resource_center = resourceBtn.global_position + (resourceBtn.size / 2.0)
@@ -64,6 +67,8 @@ func test_resource_click(test_data, resourceBtn):
 	var y_dist = abs(player_position.y - resource_center.y)
 	var dist = sqrt((x_dist * x_dist) + (y_dist * y_dist))
 	print('test data was: ', test_data)
+	print('resource was: ', attached_resource)
+	
 	
 	print('distance from player was: ', dist)
 	if dist < resource_max_distance:
