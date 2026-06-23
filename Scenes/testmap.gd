@@ -1,10 +1,32 @@
 extends Node2D
 
-func _ready() -> void:
-	$ScrollingCenteredMap.SetLoadableSource(MakeAreaNode)
-	
+var resource_placeholders = []
+var test_coords = [[44.08328, -123.11245], [44.08338, -123.11370], [44.08117, -123.11280]]
 
+func _ready() -> void:
+	$ScrollingCenteredMap2.SetLoadableSource(MakeAreaNode)
+	#splats.append(preload("res://Scenes/SplatScene/splat35.png"))
+	#for i in range(5):
+		#var preload_path = 'res://Scenes/testmap/splat0' 
+		#preload_path += i 
+		#preload_path += '.png'
+		#
+		#resource_placeholders.append(preload(preload_path))
+	OS.request_permission('android.permission.ACCESS_FINE_LOCATION')
+	#OS.request_permission('android.permission.ACCESS_BACKGROasdfsdfUND_LOCATION')
+
+
+func get_pluscode_from_coords(lat, lon):
+	var plusCode = PlusCodes.EncodeLatLonSize(lat, lon, 11)
+
+func test_gen_dots():
+	var pluscodes_to_display = []
+	for point in test_coords:
+		var new_pluscode = get_pluscode_from_coords(point[0], point[1])
+		pluscodes_to_display.append(new_pluscode)
+	
 func MakeAreaNode(cell8, gridSize):
+	print('cell 8 was: ', cell8)
 	var results = []
 	for x in gridSize:
 		for y in gridSize:
