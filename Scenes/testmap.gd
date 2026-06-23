@@ -2,23 +2,29 @@ extends Node2D
 
 var resource_placeholders = []
 const test_coords = [[44.08328, -123.11245], [44.08338, -123.11370], [44.08117, -123.11280]]
-const test_resource_names = ['nails', 'boards', 'logs', 'tiles', 'wire']
+const test_resource_names = ['Nails', 'Boards', 'Logs', 'Wire']
 const resource_max_distance = 100
 const shop_max_distance = 500
+const scale_for_32x_markers = 2
+const scale_for_32x_card = 20
+var inventory_dict = {
+	'Nails':0,
+	'Boards':0,
+	'Logs':0,
+	'Wire':0
+	}
 @onready var map = $ScrollingCenteredMap2
 @onready var player = $ScrollingCenteredMap2/playerIndicator
+@onready var ui = $CanvasLayer/Control
+@onready var bottom_menu = $CanvasLayer/Control/BottomMenu
 func _ready() -> void:
 	#$ScrollingCenteredMap2.SetLoadableSource(MakeAreaNode)
 	$ScrollingCenteredMap2.SetLoadableSource(test_gen_dots)
-	#splats.append(preload("res://Scenes/SplatScene/splat35.png"))
-	#for i in range(5):
-		#var preload_path = 'res://Scenes/testmap/splat0' 
-		#preload_path += i 
-		#preload_path += '.png'
-		#
-		#resource_placeholders.append(preload(preload_path))
 	OS.request_permission('android.permission.ACCESS_FINE_LOCATION')
 	#OS.request_permission('android.permission.ACCESS_BACKGROasdfsdfUND_LOCATION')
+	ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bottom_menu.mouse_filter = Control.MOUSE_FILTER_PASS
+	
 
 
 func get_pluscode_from_coords(lat, lon):
@@ -31,19 +37,20 @@ func test_gen_dots(cell8 = null, gridSize = null):
 		var new_pluscode = get_pluscode_from_coords(point[0], point[1])
 		#pluscodes_to_display.append(new_pluscode)
 		var spritePoint = Sprite2D.new()
-		var spritePointTexture = load("res://Scenes/testmap/splats/splat00.png")
+		var random_resource = test_resource_names.pick_random()
+		var resource_image_path = "res://Scenes/testmap/mini-arts/" + random_resource + ".png" 
+		var spritePointTexture = load(resource_image_path)
 		spritePoint.texture = spritePointTexture
-		spritePoint.scale = Vector2(.5,.5)
+		spritePoint.scale = Vector2(scale_for_32x_markers, scale_for_32x_markers)
 		spritePoint.set_meta('location', new_pluscode)
 		var data_test = point[0]
 		
-		var random_resource = test_resource_names.pick_random()
-		
 		var spritePointBtn = Button.new()
-		var scaled_size = spritePoint.texture.get_size() * spritePoint.scale
-		spritePointBtn.size = scaled_size	
+		var scaled_size = spritePoint.texture.get_size() * spritePoint.scale / 3
+		spritePointBtn.size = scaled_size
 		spritePointBtn.position = -scaled_size / 2.0
-		spritePointBtn.pressed.connect(test_resource_click.bind(data_test, spritePointBtn, random_resource))
+		spritePointBtn.modulate.a = 0.3
+		#spritePointBtn.pressed.connect(test_resource_click.bind(data_test, spritePointBtn, random_resource))
 				
 		var spritePointCol = CollisionShape2D.new()
 		var spritePointColShape = RectangleShape2D.new()
@@ -52,6 +59,7 @@ func test_gen_dots(cell8 = null, gridSize = null):
 				
 		spritePoint.add_child(spritePointCol)
 		spritePoint.add_child(spritePointBtn)
+		spritePointBtn.pressed.connect(make_resource_popup.bind(spritePoint, random_resource))
 		pluscodes_to_display.append(spritePoint)
 				
 	#print('test dots were: ', pluscodes_to_display)
@@ -73,10 +81,54 @@ func test_resource_click(test_data, resourceBtn, attached_resource):
 	print('distance from player was: ', dist)
 	if dist < resource_max_distance:
 		print('you can gather this resource')
+		
 	if dist < shop_max_distance: 
 		print('you can visit this shop')
 	
+func make_resource_popup(resource_node, resource_name):
+	var canvas_node = CanvasLayer.new()
+	var control_node = Control.new()
 	
+	var resource_sprite = Sprite2D.new()
+	var resource_image_path = "res://Scenes/testmap/mini-arts/" + resource_name + ".png" 
+	var resource_sprite_texture = load(resource_image_path)
+	resource_sprite.texture = resource_sprite_texture
+	resource_sprite.z_index = 3
+	resource_sprite.scale = Vector2(scale_for_32x_card, scale_for_32x_card)
+	resource_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	resource_sprite.position = Vector2(400, 350)
+	
+	var color_block = ColorRect.new()
+	color_block.set_anchors_preset(Control.PRESET_FULL_RECT)
+	color_block.size = Vector2(800, 1200)
+	color_block.z_index = 1
+	
+	var add_to_inventory_btn = Button.new()
+	add_to_inventory_btn.pressed.connect(add_item_to_inventory.bind(resource_node, resource_name, canvas_node))
+	add_to_inventory_btn.text = "Add to inventory"
+	add_to_inventory_btn.icon = MeshTexture
+	add_to_inventory_btn.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	add_to_inventory_btn.z_index = 23
+	#add_to_inventory_btn.size = Vector2(140, 30)
+	add_to_inventory_btn.position = Vector2(230, 1031)
+	add_to_inventory_btn.scale = Vector2(2.5, 3)
+	
+	canvas_node.add_child(control_node)
+	control_node.add_child(resource_sprite)
+	control_node.add_child(color_block)
+	control_node.add_child(add_to_inventory_btn)
+	$".".add_child(canvas_node)
+	
+func add_item_to_inventory(resource_node, resource_name, resource_card):
+	inventory_dict[resource_name] += 1
+	print('added ', resource_name, ' to inventory. Current inv: ', inventory_dict)
+	resource_node.queue_free()
+	resource_card.queue_free()
+	
+func display_inventory():
+	print('display inv')
+
+
 func MakeAreaNode(cell8, gridSize):
 	print('cell 8 was: ', cell8)
 	test_gen_dots()

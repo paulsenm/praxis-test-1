@@ -2,16 +2,103 @@
 
 [ext_resource type="Script" uid="uid://cngq0m6pwxdb3" path="res://Scenes/testmap.gd" id="1_2bldp"]
 [ext_resource type="PackedScene" uid="uid://bpnt0yvbysdow" path="res://PraxisMapper/Controls/ScrollingCenteredMap2.tscn" id="1_2ynb8"]
+[ext_resource type="Texture2D" uid="uid://bi37wabmvqsnc" path="res://Scenes/testmap/mini-arts/Boards.png" id="3_gu0xf"]
+
+[sub_resource type="MeshTexture" id="MeshTexture_gu0xf"]
 
 [node name="testmap" type="Node2D" unique_id=1899921033]
 script = ExtResource("1_2bldp")
 
 [node name="ScrollingCenteredMap2" parent="." unique_id=1439201203 instance=ExtResource("1_2ynb8")]
-offset_left = 104.0
-offset_top = 108.0
-offset_right = 900.0
-offset_bottom = 1339.0
+offset_left = 6.1035156e-05
+offset_top = 3.0517578e-05
+offset_right = 796.00006
+offset_bottom = 1203.0
+scale = Vector2(1.0051625, 1.0000004)
 
 [node name="GridContainer" type="GridContainer" parent="." unique_id=845118241]
+offset_right = 45.0
+offset_bottom = 30.0
+columns = 5
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1413026191]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=449234224]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BottomMenu" type="ColorRect" parent="CanvasLayer/Control" unique_id=130895540]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -214.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/BottomMenu" unique_id=1481470264]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+color = Color(0, 1, 1, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="CanvasLayer/Control/BottomMenu" unique_id=1321367752]
+layout_mode = 0
+offset_left = 754.0
+offset_top = 173.0
+offset_right = 794.0
+offset_bottom = 213.0
+color = Color(1, 0, 1, 1)
+
+[node name="Button" type="Button" parent="CanvasLayer/Control/BottomMenu" unique_id=1090978484]
+layout_mode = 0
+offset_left = 61.0
+offset_top = 64.0
+offset_right = 263.0
+offset_bottom = 155.0
+text = "Inventory"
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=2031988602]
+visible = false
+
+[node name="Control" type="Control" parent="CanvasLayer2" unique_id=1264415479]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer2/Control" unique_id=128480362]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 763.0
+offset_bottom = 1154.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="CanvasLayer2/Control" unique_id=1729560827]
+z_index = 2
+layout_mode = 0
+offset_left = 228.0
+offset_top = 825.0
+offset_right = 370.0
+offset_bottom = 856.0
+scale = Vector2(2.4380472, 3.0398698)
+text = "Add to inventory"
+icon = SubResource("MeshTexture_gu0xf")
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer2/Control" unique_id=1870286896]
+z_index = 1
+texture_filter = 1
+position = Vector2(399, 350)
+scale = Vector2(22.296873, 21.046875)
+texture = ExtResource("3_gu0xf")
+
+[connection signal="pressed" from="CanvasLayer/Control/BottomMenu/Button" to="." method="display_inventory"]

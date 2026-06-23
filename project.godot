@@ -26,9 +26,10 @@ PraxisCore="*res://PraxisMapper/Scripts/PraxisCore.gd"
 
 [display]
 
-window/size/viewport_width=1000
-window/size/viewport_height=1500
+window/size/viewport_width=800
+window/size/viewport_height=1200
 window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 window/handheld/orientation=1
 
 [dotnet]
