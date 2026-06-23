@@ -3,8 +3,11 @@
 [ext_resource type="Script" uid="uid://d1f647e0d5w1f" path="res://PraxisMapper/Controls/ScrollingCenteredMap2.gd" id="1_om4r7"]
 [ext_resource type="Texture2D" uid="uid://c3033wigb05gp" path="res://PraxisMapper/Resources/kenney_arrow.png" id="3_mhlsw"]
 [ext_resource type="PackedScene" uid="uid://fipn8k07sdhc" path="res://PraxisMapper/FullOffline/FullSingleTileQueued.tscn" id="3_x4y4u"]
+[ext_resource type="Texture2D" uid="uid://xvyj5uj4aqpi" path="res://PraxisMapper/Resources/LoadingOverlay.png" id="4_53svj"]
 [ext_resource type="PackedScene" uid="uid://b2hnhr1t57jm7" path="res://PraxisMapper/Controls/CellTracker.tscn" id="5_i08gh"]
 [ext_resource type="PackedScene" uid="uid://bev1jin6r7t6n" path="res://PraxisMapper/Controls/GetFile.tscn" id="5_spgqn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gejoe"]
 
 [node name="ScrollingCenteredMap" type="Control" unique_id=1439201203]
 layout_mode = 3
@@ -88,6 +91,26 @@ offset_right = 16.0
 offset_bottom = 28.0
 pivot_offset = Vector2(8, 12.5)
 texture = ExtResource("3_mhlsw")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="playerIndicator" unique_id=1674374580]
+position = Vector2(7, 12)
+scale = Vector2(3.84, 3.84)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="playerIndicator/CharacterBody2D" unique_id=1593784809]
+shape = SubResource("CircleShape2D_gejoe")
+
+[node name="CharacterBody2D2" type="CharacterBody2D" parent="playerIndicator" unique_id=18851867]
+position = Vector2(7, 12)
+scale = Vector2(11.545599, 11.545599)
+
+[node name="Sprite2D" type="Sprite2D" parent="playerIndicator/CharacterBody2D2" unique_id=2067770011]
+modulate = Color(1, 1, 1, 0.35686275)
+scale = Vector2(0.22172949, 0.22172949)
+texture = ExtResource("4_53svj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="playerIndicator/CharacterBody2D2" unique_id=1314522671]
+scale = Vector2(1.8903825, 1.8903825)
+shape = SubResource("CircleShape2D_gejoe")
 
 [node name="Center" type="ColorRect" parent="." unique_id=1530525154]
 custom_minimum_size = Vector2(10, 10)

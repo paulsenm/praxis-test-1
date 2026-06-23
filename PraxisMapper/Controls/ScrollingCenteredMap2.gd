@@ -47,7 +47,7 @@ var cellTrackerDrawerPL = preload("res://PraxisMapper/Controls/CellTrackerDrawer
 ## What scaling factors are available to the player. Must be in order from smallest to largest.
 @export var zoomFactors = [0.25, 0.5, 1.0, 1.5, 2.0]
 ## The starting zoom factor. Must be one of the values in zoomFactors.
-@export var zoomFactor = 1.0
+@export var zoomFactor = 1.5
 
 #This should let the map handle loading/unloading nodes automatically.
 ## the Callable to pass the current plus code and tile grid size to find what to place on each map tile. 
@@ -67,10 +67,10 @@ var noiseTile = preload("res://PraxisMapper/Resources/noisetile.png")
 var controlCenter = Vector2(0,0)
 
 func _ready():
-	$Center.visible = false
+	$Center.visible = true
 	Setup()
 	$playerIndicator.visible = showPlayerArrow
-	$centerIndicator.visible = false
+	$centerIndicator.visible = true
 	$TileDrawerQueued.tile_created.connect(UpdateTexture)
 	PraxisCore.plusCode_changed.connect(plusCode_changed)
 	PraxisCore.force_redraw.connect(ForceRedraw)
