@@ -280,6 +280,7 @@ func RefreshTiles(current):
 	if loadTrackables != null: #Automatic tracking. May not be the most optimized behavior but should work
 		clearAllTrackedChildren()
 		var newTrackables = loadTrackables.call(base, tileGridSize)
+		#var newTrackables = loadTrackables.call()
 		for newnode in newTrackables:
 			trackChildOnMap(newnode, newnode.get_meta("location"))
 	else: #manual tracking

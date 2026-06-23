@@ -7,5 +7,11 @@
 script = ExtResource("1_2bldp")
 
 [node name="ScrollingCenteredMap2" parent="." unique_id=1439201203 instance=ExtResource("1_2ynb8")]
-offset_right = 1313.0
-offset_bottom = 2168.0
+offset_left = 104.0
+offset_top = 108.0
+offset_right = 900.0
+offset_bottom = 1339.0
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=845118241]
+offset_right = 40.0
+offset_bottom = 40.0
