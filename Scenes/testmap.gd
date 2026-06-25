@@ -13,10 +13,16 @@ var inventory_dict = {
 	'Logs':0,
 	'Wire':0
 	}
+
+
 @onready var map = $ScrollingCenteredMap2
 @onready var player = $ScrollingCenteredMap2/playerIndicator
 @onready var ui = $CanvasLayer/Control
 @onready var bottom_menu = $CanvasLayer/Control/BottomMenu
+@onready var scroll_container = $ScrollContainer
+@onready var inventory_root = $inventory_root
+@onready var inventory_vbox = $CanvasLayer3/Control/ScrollContainer/VBoxContainer
+
 func _ready() -> void:
 	#$ScrollingCenteredMap2.SetLoadableSource(MakeAreaNode)
 	$ScrollingCenteredMap2.SetLoadableSource(test_gen_dots)
@@ -118,6 +124,17 @@ func make_resource_popup(resource_node, resource_name):
 	control_node.add_child(color_block)
 	control_node.add_child(add_to_inventory_btn)
 	$".".add_child(canvas_node)
+
+func make_inventory_item_display(item_name, item_qty):
+	print('item name: ', item_name)
+	print('item quantity: ', item_qty)
+
+func make_inventory_hbox(item_array):
+	print('make one hbox with up to 3 inventory items')
+
+func populate_inventory_popup():
+	print('populate inventory popup')
+	
 	
 func add_item_to_inventory(resource_node, resource_name, resource_card):
 	inventory_dict[resource_name] += 1
@@ -126,6 +143,42 @@ func add_item_to_inventory(resource_node, resource_name, resource_card):
 	resource_card.queue_free()
 	
 func display_inventory():
+	inventory_root.show()
+	var inventory_items_with_sprites = []
+	var hbox_container_array = []
+	var current_hbox_container = HBoxContainer.new()
+	var current_hbox_array_index = 0
+	for inventory_item in inventory_dict:
+		if inventory_dict[inventory_item] > 0:
+			var item_with_sprite = Panel.new()
+			
+			var item_sprite = Sprite2D.new()			
+			var item_sprite_path = "res://Scenes/testmap/mini-arts/" + inventory_item + ".png" 
+			var item_sprite_texture = load(item_sprite_path)
+			item_sprite.texture = item_sprite_texture
+			
+			var item_amount_display = Label.new()
+			item_amount_display.text = str(inventory_dict[inventory_item])
+			item_amount_display.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+			
+			item_with_sprite.add_child(item_sprite)
+			item_with_sprite.add_child(item_amount_display)
+			#if current_hbox_container.get_child_count() >= 3:
+				#print('making new hbox container row')
+				#hbox_container_array.append(current_hbox_container)
+				#var new_hbox_container = HBoxContainer.new()
+				#current_hbox_container = new_hbox_container
+				#current_hbox_array_index += 1
+			#if current_hbox_container.get_child_count() <= 0:
+				#var newHb
+				
+			current_hbox_container.add_child(item_with_sprite)
+			
+			
+	
+	for row in hbox_container_array:
+		scroll_container.add_child(row)
+	print('scroll container: ', scroll_container)
 	print('display inv')
 
 

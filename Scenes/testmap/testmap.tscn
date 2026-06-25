@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://cngq0m6pwxdb3" path="res://Scenes/testmap.gd" id="1_2bldp"]
 [ext_resource type="PackedScene" uid="uid://bpnt0yvbysdow" path="res://PraxisMapper/Controls/ScrollingCenteredMap2.tscn" id="1_2ynb8"]
 [ext_resource type="Texture2D" uid="uid://bi37wabmvqsnc" path="res://Scenes/testmap/mini-arts/Boards.png" id="3_gu0xf"]
+[ext_resource type="Texture2D" uid="uid://dqrrr51fo6hmy" path="res://Scenes/testmap/mini-arts/Logs.png" id="4_lg3sq"]
+[ext_resource type="Texture2D" uid="uid://cm7036x4tery6" path="res://Scenes/testmap/mini-arts/Nails.png" id="5_p6v6i"]
+[ext_resource type="Texture2D" uid="uid://cdhkd8u1cs2h" path="res://Scenes/testmap/mini-arts/Wire.png" id="6_p6v6i"]
 
 [sub_resource type="MeshTexture" id="MeshTexture_gu0xf"]
 
@@ -96,11 +99,88 @@ position = Vector2(399, 350)
 scale = Vector2(22.296873, 21.046875)
 texture = ExtResource("3_gu0xf")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1021804870]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="inventory_root" type="CanvasLayer" parent="." unique_id=1005861375]
+visible = false
+offset = Vector2(50, 100)
+transform = Transform2D(1, 0, 0, 1, 50, 100)
 
-[node name="BoxContainer" type="BoxContainer" parent="ScrollContainer" unique_id=29905983]
+[node name="PanelContainer" type="PanelContainer" parent="inventory_root" unique_id=1365514389]
+z_index = -1
+custom_minimum_size = Vector2(230, 64)
+offset_right = 230.0
+offset_bottom = 64.0
+scale = Vector2(3, 3)
+
+[node name="ColorRect" type="ColorRect" parent="inventory_root/PanelContainer" unique_id=457210032]
 layout_mode = 2
+color = Color(0.18924649, 0.18924649, 0.18924649, 1)
+
+[node name="Control" type="Control" parent="inventory_root" unique_id=1505950805]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="inventory_root/Control" unique_id=1021804870]
+custom_minimum_size = Vector2(230, 64)
+layout_mode = 1
+offset_right = 230.0
+offset_bottom = 64.0
+scale = Vector2(3, 3)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="inventory_root/Control/ScrollContainer" unique_id=322498243]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="inventory_root/Control/ScrollContainer/VBoxContainer" unique_id=345551058]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="inventory_root/Control/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1057471989]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("3_gu0xf")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="inventory_root/Control/ScrollContainer/VBoxContainer/HBoxContainer/TextureRect" unique_id=1576869557]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "3"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="TextureRect2" type="TextureRect" parent="inventory_root/Control/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=483672702]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("4_lg3sq")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="inventory_root/Control/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1256226604]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("5_p6v6i")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="inventory_root/Control/ScrollContainer/VBoxContainer" unique_id=1836962975]
+layout_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="inventory_root/Control/ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=598040471]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("6_p6v6i")
+expand_mode = 1
+stretch_mode = 5
 
 [connection signal="pressed" from="CanvasLayer/Control/BottomMenu/Button" to="." method="display_inventory"]
