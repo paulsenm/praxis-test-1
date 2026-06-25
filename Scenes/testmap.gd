@@ -7,6 +7,7 @@ const resource_max_distance = 100
 const shop_max_distance = 500
 const scale_for_32x_markers = 2
 const scale_for_32x_card = 20
+const inventory_display_width = 3
 var inventory_dict = {
 	'Nails':0,
 	'Boards':0,
@@ -125,14 +126,55 @@ func make_resource_popup(resource_node, resource_name):
 	control_node.add_child(add_to_inventory_btn)
 	$".".add_child(canvas_node)
 
-func make_inventory_item_display(item_name, item_qty):
+func make_inventory_item_display(item_name):
 	print('item name: ', item_name)
-	print('item quantity: ', item_qty)
+	var item_qty = inventory_dict[item_name]
+	
+	var texture_rect = TextureRect.new()			
+	var texture_path = "res://Scenes/testmap/mini-arts/" + item_name + ".png" 
+	var texture = load(texture_path)
+	texture_rect.texture = texture
+	texture_rect.custom_minimum_size = Vector2(64, 64)
+	
+	var inventory_quantity_label = Label.new()
+	inventory_quantity_label.text = str(item_qty)
+	inventory_quantity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	inventory_quantity_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+	texture_rect.add_child(inventory_quantity_label)
+	
+	return texture_rect
+
+
+func chunk_inv_array(inventory_array, chunk_size):
+	var chunked_array = []
+	for i in range(0, inventory_array, chunk_size):
+		var chunk = inventory_array.slice(i, i + chunk_size)
+		chunked_array.append(chunk)
+	return chunked_array
 
 func make_inventory_hbox(item_array):
+	var actual_hbox = HBoxContainer.new()
 	print('make one hbox with up to 3 inventory items')
+	for item_name in item_array:
+		var full_item = make_inventory_item_display(item_name)
+		actual_hbox.add_child(full_item)
+	
+	return actual_hbox
+		
 
 func populate_inventory_popup():
+	var inventory_array_to_show = []
+	var hbox_array = []
+	for item_name in test_resource_names:
+		if inventory_dict[item_name] > 0:
+			inventory_array_to_show.append(item_name)
+	var chunked_item_name_array = chunk_inv_array(inventory_array_to_show, inventory_display_width)
+	for chunk in chunked_item_name_array:
+		var new_inv_h_box = make_inventory_hbox(chunk)
+		hbox_array.append(new_inv_h_box)
+	
+	
+	
 	print('populate inventory popup')
 	
 	
