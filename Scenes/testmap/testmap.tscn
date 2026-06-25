@@ -130,10 +130,41 @@ scale = Vector2(3, 3)
 [node name="VBoxContainer" type="VBoxContainer" parent="inventory_root/Control/ScrollContainer" unique_id=322498243]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="inventory_root/Control/ScrollContainer/VBoxContainer" unique_id=345551058]
+[node name="inventory_root2" type="CanvasLayer" parent="." unique_id=1907370359]
+visible = false
+offset = Vector2(50, 100)
+transform = Transform2D(1, 0, 0, 1, 50, 100)
+
+[node name="PanelContainer" type="PanelContainer" parent="inventory_root2" unique_id=242565248]
+z_index = -1
+custom_minimum_size = Vector2(230, 64)
+offset_right = 230.0
+offset_bottom = 64.0
+scale = Vector2(3, 3)
+
+[node name="ColorRect" type="ColorRect" parent="inventory_root2/PanelContainer" unique_id=378879986]
+layout_mode = 2
+color = Color(0.18924649, 0.18924649, 0.18924649, 1)
+
+[node name="Control" type="Control" parent="inventory_root2" unique_id=2087662076]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="inventory_root2/Control" unique_id=1419958223]
+custom_minimum_size = Vector2(230, 64)
+layout_mode = 1
+offset_right = 230.0
+offset_bottom = 64.0
+scale = Vector2(3, 3)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="inventory_root2/Control/ScrollContainer" unique_id=1193822773]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="inventory_root/Control/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1057471989]
+[node name="HBoxContainer" type="HBoxContainer" parent="inventory_root2/Control/ScrollContainer/VBoxContainer" unique_id=1205851388]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="inventory_root2/Control/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1637833656]
 texture_filter = 1
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -141,7 +172,7 @@ texture = ExtResource("3_gu0xf")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="inventory_root/Control/ScrollContainer/VBoxContainer/HBoxContainer/TextureRect" unique_id=1576869557]
+[node name="Label" type="Label" parent="inventory_root2/Control/ScrollContainer/VBoxContainer/HBoxContainer/TextureRect" unique_id=1974317659]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -156,7 +187,7 @@ text = "3"
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[node name="TextureRect2" type="TextureRect" parent="inventory_root/Control/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=483672702]
+[node name="TextureRect2" type="TextureRect" parent="inventory_root2/Control/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=744729470]
 texture_filter = 1
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -164,7 +195,7 @@ texture = ExtResource("4_lg3sq")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect3" type="TextureRect" parent="inventory_root/Control/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1256226604]
+[node name="TextureRect3" type="TextureRect" parent="inventory_root2/Control/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=912977013]
 texture_filter = 1
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -172,10 +203,10 @@ texture = ExtResource("5_p6v6i")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="inventory_root/Control/ScrollContainer/VBoxContainer" unique_id=1836962975]
+[node name="HBoxContainer2" type="HBoxContainer" parent="inventory_root2/Control/ScrollContainer/VBoxContainer" unique_id=1879821315]
 layout_mode = 2
 
-[node name="TextureRect3" type="TextureRect" parent="inventory_root/Control/ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=598040471]
+[node name="TextureRect3" type="TextureRect" parent="inventory_root2/Control/ScrollContainer/VBoxContainer/HBoxContainer2" unique_id=1094819060]
 texture_filter = 1
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2

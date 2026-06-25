@@ -20,9 +20,9 @@ var inventory_dict = {
 @onready var player = $ScrollingCenteredMap2/playerIndicator
 @onready var ui = $CanvasLayer/Control
 @onready var bottom_menu = $CanvasLayer/Control/BottomMenu
-@onready var scroll_container = $ScrollContainer
+#@onready var scroll_container = $ScrollContainer
 @onready var inventory_root = $inventory_root
-@onready var inventory_vbox = $CanvasLayer3/Control/ScrollContainer/VBoxContainer
+@onready var inventory_vbox = $inventory_root/Control/ScrollContainer/VBoxContainer
 
 func _ready() -> void:
 	#$ScrollingCenteredMap2.SetLoadableSource(MakeAreaNode)
@@ -135,6 +135,8 @@ func make_inventory_item_display(item_name):
 	var texture = load(texture_path)
 	texture_rect.texture = texture
 	texture_rect.custom_minimum_size = Vector2(64, 64)
+	texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	
 	var inventory_quantity_label = Label.new()
 	inventory_quantity_label.text = str(item_qty)
@@ -147,7 +149,7 @@ func make_inventory_item_display(item_name):
 
 func chunk_inv_array(inventory_array, chunk_size):
 	var chunked_array = []
-	for i in range(0, inventory_array, chunk_size):
+	for i in range(0, len(inventory_array), chunk_size):
 		var chunk = inventory_array.slice(i, i + chunk_size)
 		chunked_array.append(chunk)
 	return chunked_array
@@ -167,6 +169,7 @@ func populate_inventory_popup():
 	var hbox_array = []
 	for item_name in test_resource_names:
 		if inventory_dict[item_name] > 0:
+			print(item_name, ' had qty of: ', inventory_dict[item_name])
 			inventory_array_to_show.append(item_name)
 	var chunked_item_name_array = chunk_inv_array(inventory_array_to_show, inventory_display_width)
 	for chunk in chunked_item_name_array:
@@ -186,6 +189,7 @@ func add_item_to_inventory(resource_node, resource_name, resource_card):
 	
 func display_inventory():
 	inventory_root.show()
+	populate_inventory_popup()
 	var inventory_items_with_sprites = []
 	var hbox_container_array = []
 	var current_hbox_container = HBoxContainer.new()
@@ -218,9 +222,9 @@ func display_inventory():
 			
 			
 	
-	for row in hbox_container_array:
-		scroll_container.add_child(row)
-	print('scroll container: ', scroll_container)
+	#for row in hbox_container_array:
+		#scroll_container.add_child(row)
+	#print('scroll container: ', scroll_container)
 	print('display inv')
 
 
