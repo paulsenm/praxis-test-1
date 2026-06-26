@@ -221,4 +221,3 @@ expand_mode = 1
 stretch_mode = 5
 
 [connection signal="pressed" from="CanvasLayer/Control/BottomMenu/Button" to="." method="display_inventory"]
-[connection signal="pressed" from="inventory_root/Button" to="." method="hide_inventory"]

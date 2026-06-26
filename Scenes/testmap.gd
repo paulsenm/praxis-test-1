@@ -175,12 +175,13 @@ func populate_inventory_popup():
 	for chunk in chunked_item_name_array:
 		var new_inv_h_box = make_inventory_hbox(chunk)
 		hbox_array.append(new_inv_h_box)
-	
+	for hbox in hbox_array:
+		inventory_vbox.add_child(hbox)
 	
 	
 	print('populate inventory popup')
 	
-	
+
 func add_item_to_inventory(resource_node, resource_name, resource_card):
 	inventory_dict[resource_name] += 1
 	print('added ', resource_name, ' to inventory. Current inv: ', inventory_dict)
@@ -227,7 +228,10 @@ func display_inventory():
 	#print('scroll container: ', scroll_container)
 	print('display inv')
 
-
+func hide_inventory():
+	inventory_root.hide()
+	for child in inventory_vbox.get_children():
+		child.queue_free()
 func MakeAreaNode(cell8, gridSize):
 	print('cell 8 was: ', cell8)
 	test_gen_dots()
