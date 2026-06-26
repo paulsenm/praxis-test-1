@@ -23,6 +23,8 @@ var inventory_dict = {
 #@onready var scroll_container = $ScrollContainer
 @onready var inventory_root = $inventory_root
 @onready var inventory_vbox = $inventory_root/Control/ScrollContainer/VBoxContainer
+@onready var inventory_show_button = $CanvasLayer/Control/BottomMenu/InventoryButton
+@onready var inventory_hide_button = $CanvasLayer/Control/BottomMenu/InventoryButtonHide
 
 func _ready() -> void:
 	#$ScrollingCenteredMap2.SetLoadableSource(MakeAreaNode)
@@ -190,11 +192,9 @@ func add_item_to_inventory(resource_node, resource_name, resource_card):
 	
 func display_inventory():
 	inventory_root.show()
+	inventory_hide_button.show()
 	populate_inventory_popup()
-	var inventory_items_with_sprites = []
-	var hbox_container_array = []
 	var current_hbox_container = HBoxContainer.new()
-	var current_hbox_array_index = 0
 	for inventory_item in inventory_dict:
 		if inventory_dict[inventory_item] > 0:
 			var item_with_sprite = Panel.new()
@@ -210,26 +210,13 @@ func display_inventory():
 			
 			item_with_sprite.add_child(item_sprite)
 			item_with_sprite.add_child(item_amount_display)
-			#if current_hbox_container.get_child_count() >= 3:
-				#print('making new hbox container row')
-				#hbox_container_array.append(current_hbox_container)
-				#var new_hbox_container = HBoxContainer.new()
-				#current_hbox_container = new_hbox_container
-				#current_hbox_array_index += 1
-			#if current_hbox_container.get_child_count() <= 0:
-				#var newHb
 				
 			current_hbox_container.add_child(item_with_sprite)
-			
-			
-	
-	#for row in hbox_container_array:
-		#scroll_container.add_child(row)
-	#print('scroll container: ', scroll_container)
 	print('display inv')
 
 func hide_inventory():
 	inventory_root.hide()
+	inventory_hide_button.hide()
 	for child in inventory_vbox.get_children():
 		child.queue_free()
 func MakeAreaNode(cell8, gridSize):

@@ -53,7 +53,17 @@ offset_right = 794.0
 offset_bottom = 213.0
 color = Color(1, 0, 1, 1)
 
-[node name="Button" type="Button" parent="CanvasLayer/Control/BottomMenu" unique_id=1090978484]
+[node name="InventoryButton" type="Button" parent="CanvasLayer/Control/BottomMenu" unique_id=1090978484]
+layout_mode = 0
+offset_left = 61.0
+offset_top = 64.0
+offset_right = 263.0
+offset_bottom = 155.0
+text = "Inventory"
+
+[node name="InventoryButtonHide" type="Button" parent="CanvasLayer/Control/BottomMenu" unique_id=576895595]
+visible = false
+z_index = 1
 layout_mode = 0
 offset_left = 61.0
 offset_top = 64.0
@@ -100,6 +110,7 @@ scale = Vector2(22.296873, 21.046875)
 texture = ExtResource("3_gu0xf")
 
 [node name="inventory_root" type="CanvasLayer" parent="." unique_id=1005861375]
+visible = false
 offset = Vector2(50, 100)
 transform = Transform2D(1, 0, 0, 1, 50, 100)
 
@@ -220,5 +231,6 @@ texture = ExtResource("6_p6v6i")
 expand_mode = 1
 stretch_mode = 5
 
-[connection signal="pressed" from="CanvasLayer/Control/BottomMenu/Button" to="." method="display_inventory"]
+[connection signal="pressed" from="CanvasLayer/Control/BottomMenu/InventoryButton" to="." method="display_inventory"]
+[connection signal="pressed" from="CanvasLayer/Control/BottomMenu/InventoryButtonHide" to="." method="hide_inventory"]
 [connection signal="pressed" from="inventory_root/Button" to="." method="hide_inventory"]
