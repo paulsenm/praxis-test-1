@@ -1,5 +1,5 @@
 extends Node2D
-
+#testing push from tablet
 var resource_placeholders = []
 const test_coords = [[44.08328, -123.11245], [44.08338, -123.11370], [44.08117, -123.11280]]
 const test_resource_names = ['Nails', 'Boards', 'Logs', 'Wire']
