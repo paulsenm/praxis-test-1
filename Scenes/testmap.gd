@@ -2,12 +2,14 @@ extends Node2D
 #testing push from tablet
 var resource_placeholders = []
 const test_coords = [[44.08328, -123.11245], [44.08338, -123.11370], [44.08117, -123.11280]]
+const test_nodes_coords = [[44.08193,-123.1130902],[44.0819524,-123.1127246],[44.0817925,-123.1127239],[44.0818266,-123.1128404],[44.0818162,-123.1130446],[44.0817967,-123.1130426],[44.0819085,-123.1128166],[44.0818602,-123.1127966],[44.0818885,-123.1126645],[44.0819368,-123.1126845],[44.081967,-123.1126657],[44.0819577,-123.1126933],[44.0819443,-123.1128576],[44.0819031,-123.1130831],[44.081853,-123.1130804],[44.0818586,-123.1128779],[44.0819087,-123.1128806],[44.0820186,-123.1132066],[44.0821332,-123.1130889],[44.0820036,-123.1130681],[44.0820136,-123.1129463],[44.0820326,-123.1129494],[44.0820379,-123.1128849],[44.0820198,-123.112882],[44.0820293,-123.1127678],[44.0820146,-123.1131929],[44.0820991,-123.1127253],[44.0819748,-123.1126511]]
 const test_resource_names = ['Nails', 'Boards', 'Logs', 'Wire']
 const resource_max_distance = 100
 const shop_max_distance = 500
 const scale_for_32x_markers = 2
 const scale_for_32x_card = 20
 const inventory_display_width = 3
+const local_poi_host_base_url = 'http://127.0.0.1:5000/api/loc'
 var inventory_dict = {
 	'Nails':0,
 	'Boards':0,
@@ -25,6 +27,8 @@ var inventory_dict = {
 @onready var inventory_vbox = $inventory_root/Control/ScrollContainer/VBoxContainer
 @onready var inventory_show_button = $CanvasLayer/Control/BottomMenu/InventoryButton
 @onready var inventory_hide_button = $CanvasLayer/Control/BottomMenu/InventoryButtonHide
+@onready var http_request_node = $HTTPRequest
+@onready var poi_coords := []
 
 func _ready() -> void:
 	#$ScrollingCenteredMap2.SetLoadableSource(MakeAreaNode)
@@ -33,6 +37,7 @@ func _ready() -> void:
 	#OS.request_permission('android.permission.ACCESS_BACKGROasdfsdfUND_LOCATION')
 	ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bottom_menu.mouse_filter = Control.MOUSE_FILTER_PASS
+	ping_once()
 	
 
 
@@ -40,9 +45,36 @@ func get_pluscode_from_coords(lat, lon):
 	var plusCode = PlusCodes.EncodeLatLonSize(lat, lon, 11)
 	return plusCode
 
+func ping_once():
+	poi_coords = await get_poi_from_api()
+	print("poi_coords: ", poi_coords)
+
+	$ScrollingCenteredMap2.RefreshTiles(PraxisCore.currentPlusCode)
+	
+#http://127.0.0.1:5000/api/loc?lat=44.08195&lon=-123.11291
+func get_poi_from_api(lat='44.08195', lon='-123.11291'):
+	const api_base_url_local = "http://127.0.0.1:5000/api/loc"
+	var query_parameters = "?lat=" + lat + "&lon=" + lon
+	var full_req_url = api_base_url_local + query_parameters
+	full_req_url = 'http://127.0.0.1:5000/api/loc?lat=44.08195&lon=-123.11291'
+	print('full req url was: ', full_req_url)
+	#var http_request_poi = HTTPRequest.new()
+	http_request_node.request(full_req_url)
+	var response = await http_request_node.request_completed
+	print('response was: ', response)
+	var body = response[3]
+	var body_string = body.get_string_from_utf8()
+	
+	return JSON.parse_string(body_string)
+
+
+
 func test_gen_dots(cell8 = null, gridSize = null):
+	print('poi coords were: ', poi_coords)
 	var pluscodes_to_display = []
-	for point in test_coords:
+	#for point in test_coords:
+	for point in poi_coords:
+		print('getting point for: ', str(point))
 		var new_pluscode = get_pluscode_from_coords(point[0], point[1])
 		#pluscodes_to_display.append(new_pluscode)
 		var spritePoint = Sprite2D.new()
@@ -245,3 +277,9 @@ func MakeAreaNode(cell8, gridSize):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+
+func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+	print('body string: ', body.get_string_from_utf8()) # Replace with function body.
+	var coords_array = body.get_string_from_utf8()
+	return

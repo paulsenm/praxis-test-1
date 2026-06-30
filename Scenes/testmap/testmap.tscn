@@ -71,6 +71,14 @@ offset_right = 263.0
 offset_bottom = 155.0
 text = "Inventory"
 
+[node name="Button" type="Button" parent="CanvasLayer/Control/BottomMenu" unique_id=1633326678]
+layout_mode = 0
+offset_left = 516.0
+offset_top = 61.0
+offset_right = 663.0
+offset_bottom = 166.0
+text = "POI test"
+
 [node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=2031988602]
 visible = false
 
@@ -231,6 +239,10 @@ texture = ExtResource("6_p6v6i")
 expand_mode = 1
 stretch_mode = 5
 
+[node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=638259422]
+
 [connection signal="pressed" from="CanvasLayer/Control/BottomMenu/InventoryButton" to="." method="display_inventory"]
 [connection signal="pressed" from="CanvasLayer/Control/BottomMenu/InventoryButtonHide" to="." method="hide_inventory"]
+[connection signal="pressed" from="CanvasLayer/Control/BottomMenu/Button" to="." method="get_poi_from_api"]
 [connection signal="pressed" from="inventory_root/Button" to="." method="hide_inventory"]
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]

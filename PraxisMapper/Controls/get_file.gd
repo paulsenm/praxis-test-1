@@ -1,5 +1,6 @@
 extends Node2D
 
+
 var serverPath = "https://global.praxismapper.org/"
 var cell4Path = "Content/OfflineData/" #Add cell2/cell4.zip to this URL, like: 2C/2CP2.zip
 var cell6Path = "Offline/FromZip/" # add the Cell6 only to get the JSON file
