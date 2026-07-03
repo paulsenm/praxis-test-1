@@ -245,6 +245,6 @@ stretch_mode = 5
 
 [connection signal="pressed" from="CanvasLayer/Control/BottomMenu/InventoryButton" to="." method="display_inventory"]
 [connection signal="pressed" from="CanvasLayer/Control/BottomMenu/InventoryButtonHide" to="." method="hide_inventory"]
-[connection signal="pressed" from="CanvasLayer/Control/BottomMenu/Button" to="." method="get_poi_from_api"]
+[connection signal="pressed" from="CanvasLayer/Control/BottomMenu/Button" to="." method="ping_once"]
 [connection signal="pressed" from="inventory_root/Button" to="." method="hide_inventory"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]
