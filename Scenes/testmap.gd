@@ -10,6 +10,8 @@ const scale_for_32x_markers = 2
 const scale_for_32x_card = 20
 #const inventory_display_width = 3
 const local_poi_host_base_url = 'http://127.0.0.1:5000/api/loc'
+const url_code_for_plus_symbol = '%2b'
+
 
 
 @onready var map = $ScrollingCenteredMap2
@@ -19,6 +21,7 @@ const local_poi_host_base_url = 'http://127.0.0.1:5000/api/loc'
 @onready var inventory_root = $inventory_root
 @onready var http_request_node = $HTTPRequest
 @onready var poi_coords := []
+@onready var old_pluscode = PraxisCore.currentPlusCode
 
 func _ready() -> void:
 	#$ScrollingCenteredMap2.SetLoadableSource(MakeAreaNode)
@@ -35,12 +38,28 @@ func get_pluscode_from_coords(lat, lon):
 	var plusCode = PlusCodes.EncodeLatLonSize(lat, lon, 11)
 	return plusCode
 
+#http://127.0.0.1:5000/api/
+func gps_from_pluscode(pluscode):
+	const api_base_url_local = 'http://127.0.0.1:5000/api/pc'
+	var trimmed_pluscode_space = pluscode.replace(" ", "")
+	var trimmed_pluscode_plus = trimmed_pluscode_space.replace("+", "")
+	var url_pluscode = trimmed_pluscode_plus.insert(8, url_code_for_plus_symbol)
+	var query_parameter = '?pc='+url_pluscode
+	var full_url_local = api_base_url_local + query_parameter
+	print('full pluscode request url: ', full_url_local)
+	http_request_node.request(full_url_local)
+	var response = await http_request_node.request_completed
+	var coords =  response[3].get_string_from_utf8()
+	print('response: ', coords)
+	return JSON.parse_string(coords)
+	
 func ping_once():
 	poi_coords = await get_poi_from_api()
 	print("poi_coords: ", poi_coords)
+	#var gps_test_coords = await gps_from_pluscode('84PR3VJP%2bJM')
 
 	$ScrollingCenteredMap2.RefreshTiles(PraxisCore.currentPlusCode)
-	
+
 #http://127.0.0.1:5000/api/loc?lat=44.08195&lon=-123.11291
 func get_poi_from_api(lat=44.08195, lon=-123.11291):
 	const api_base_url_local = "http://127.0.0.1:5000/api/loc"
@@ -56,7 +75,9 @@ func get_poi_from_api(lat=44.08195, lon=-123.11291):
 	
 	return JSON.parse_string(body_string)
 
-
+func get_more_pois(previous_pc, current_pc):
+	#if player moves more than 500m from last loaded pc, load new resources
+	print('previous plus code: ', previous_pc, ", current plus code: ", current_pc)
 
 func test_gen_dots(cell8 = null, gridSize = null):
 	print('poi coords were: ', poi_coords)
@@ -149,6 +170,28 @@ func make_resource_popup(resource_node, resource_name):
 	control_node.add_child(color_block)
 	control_node.add_child(add_to_inventory_btn)
 	$".".add_child(canvas_node)
+
+#Very rough est - will be different near equator or poles
+func get_gps_dist(first_coords, second_coords):
+	print('first coord: ', str(first_coords))
+	var lat_dist = abs(first_coords[0] - second_coords[0])
+	var lon_dist = abs(first_coords[1] - second_coords[1])
+	#var lat_dist = abs(first_coords['lat'] - second_coords['lon'])
+	#var lon_dist = abs(first_coords['lat'] - second_coords['lon'])
+	var total_dist_dec = sqrt(lat_dist * lat_dist + lon_dist * lon_dist)
+	var total_dist_meters = total_dist_dec * 90000
+	return total_dist_meters
+
+func get_new_stuff():
+	print('get new stuff')
+	var current_pc = PraxisCore.currentPlusCode
+	print('current pc: ', current_pc)
+	var old_gps_coords = await gps_from_pluscode(old_pluscode)
+	print('old gps: ', str(old_gps_coords))
+	var current_gps_coords = await gps_from_pluscode(current_pc)
+	var distance = get_gps_dist(old_gps_coords, current_gps_coords)
+	print('distance: ', str(distance))
+	
 
 func MakeAreaNode(cell8, gridSize):
 	print('cell 8 was: ', cell8)

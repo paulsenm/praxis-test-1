@@ -144,42 +144,13 @@ func _ready():
 	if platform == "Android":
 		if Engine.get_singleton("PraxisMapperGPSPlugin") != null:
 			android_debug()
-		
-		#print('on android ')
-		#gps_provider = Engine.get_singleton("PraxisMapperGPSPlugin")
-		#if gps_provider != null:
-			#print('trying to get gps on android')
-			#var perms = OS.get_granted_permissions()
-			#if perms.find("android.permission.ACCESS_FINE_LOCATION") > -1:
-				#print("enabling GPS")
-				#gps_provider.onLocationUpdates.connect(on_monitoring_location_result)
-				#gps_provider.StartListening()
 		else:
-			pc_or_tablet_debug()
-			
+			pc_or_tablet_debug()			
 	elif platform == "Web":
-		web_debug()
-		##Engage new web app location update loop instead of android plugin.
-		##Testing if I can make it as easy as this single string and single timer.
-		#print("Starting web location provider")
-		#var evalString = "startListening();"
-		#var evalResults = JavaScriptBridge.eval(evalString)
-		#var webTimer = Timer.new()
-		#add_child(webTimer)
-		#webTimer.timeout.connect(WebLocationUpdate)
-		#webTimer.wait_time = 0.5
-		#webTimer.start()
+		web_debug()		
 	else:
 		pc_or_tablet_debug()
-		#print("GPS Provider not loaded (probably debugging on PC)")
-			#
-		#currentPlusCode = debugStartingPlusCode
-		#var debugControlScene = preload("res://PraxisMapper/Controls/DebugMovement.tscn")
-		#var debugControls = debugControlScene.instantiate()
-		#add_child(debugControls)
-		#debugControls.position.x = 0
-		#debugControls.position.y = 0
-		#debugControls.z_index = 200
+
 func android_debug():
 	print('on android ')
 	gps_provider = Engine.get_singleton("PraxisMapperGPSPlugin")
