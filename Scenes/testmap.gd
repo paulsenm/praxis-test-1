@@ -116,8 +116,6 @@ func test_gen_dots(cell8 = null, gridSize = null):
 	#print('test dots were: ', pluscodes_to_display)
 	return pluscodes_to_display
 	
-
-	
 func test_resource_click(test_data, resourceBtn, attached_resource):
 	#var player = $playerIndicator
 	var player_position = player.global_position
@@ -191,7 +189,27 @@ func get_new_stuff():
 	var current_gps_coords = await gps_from_pluscode(current_pc)
 	var distance = get_gps_dist(old_gps_coords, current_gps_coords)
 	print('distance: ', str(distance))
-	
+	if distance > 200:
+		old_pluscode = current_pc
+		make_dummy_req()
+
+func add_new_resources():
+	var current_gps_coords = await gps_from_pluscode(PraxisCore.currentPlusCode)
+	var lat = current_gps_coords[0]
+	var lon = current_gps_coords[1]
+	print('add new resources to db')
+	const base_url = "http://127.0.0.1:5000/api/db/add-resources"
+	var query_parameters = "?lat=" + str(lat) + "&lon=" + str(lon)
+	var full_url = base_url + query_parameters
+	http_request_node.request(full_url)
+	var response = await http_request_node.request_completed
+	print('response: ', response)
+
+func make_dummy_req():
+	const url = "http://127.0.0.1:5000/api/dummy"
+	http_request_node.request(url)
+	var response = await http_request_node.request_completed
+	print('response was: ', response)
 
 func MakeAreaNode(cell8, gridSize):
 	print('cell 8 was: ', cell8)
