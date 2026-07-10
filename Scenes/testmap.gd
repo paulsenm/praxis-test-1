@@ -9,9 +9,15 @@ const shop_max_distance = 500
 const scale_for_32x_markers = 2
 const scale_for_32x_card = 20
 #const inventory_display_width = 3
-const local_poi_host_base_url = 'http://127.0.0.1:5000/api/loc'
+const ip_wifi_direct = 'http://192.168.49.1:5000/api/'
+const ip_loopback = 'http://127.0.0.1:5000/api/'
+const url_for_location = 'loc'
+const url_for_pluscode = 'pc'
+const url_for_dummy = 'dummy'
+const url_db_add_resources = '/db/add-resources'
+var ip_based_on_device = ''
+const local_poi_host_base_url = 'http://192.168.49.1:5000/api/loc'
 const url_code_for_plus_symbol = '%2b'
-
 
 
 @onready var map = $ScrollingCenteredMap2
@@ -22,6 +28,9 @@ const url_code_for_plus_symbol = '%2b'
 @onready var http_request_node = $HTTPRequest
 @onready var poi_coords := []
 @onready var old_pluscode = PraxisCore.currentPlusCode
+@onready var debug_text_box = $DebugTextBox
+@onready var debug_text = $DebugTextBox/DebugText
+@onready var ping_button = $CanvasLayer/Control/BottomMenu/PingButton
 
 func _ready() -> void:
 	#$ScrollingCenteredMap2.SetLoadableSource(MakeAreaNode)
@@ -30,9 +39,29 @@ func _ready() -> void:
 	#OS.request_permission('android.permission.ACCESS_BACKGROasdfsdfUND_LOCATION')
 	ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bottom_menu.mouse_filter = Control.MOUSE_FILTER_PASS
+	check_for_wifi_direct()
 	ping_once()
 	
-
+	
+func check_for_wifi_direct():
+	var os = OS.get_name()
+	const wifi_direct_ip = '192.168.49.1'
+	const num_pings = '1'
+	var ping_limit_arg = ''
+	var output = []
+	if os == "Windows":
+		ping_limit_arg = '-n'
+	else:
+		ping_limit_arg = '-c'
+	var args = [ping_limit_arg, num_pings, wifi_direct_ip]
+	var exit_code = OS.execute('ping', args, output, true)
+	print('exit: ', exit_code)
+	print('output: ', output)
+	if exit_code == 0:
+		ip_based_on_device = ip_wifi_direct
+	else: ip_based_on_device = ip_loopback
+	var debug_text = 'ip set to: ' + ip_based_on_device
+	display_debug_text(debug_text)
 
 func get_pluscode_from_coords(lat, lon):
 	var plusCode = PlusCodes.EncodeLatLonSize(lat, lon, 11)
@@ -40,7 +69,8 @@ func get_pluscode_from_coords(lat, lon):
 
 #http://127.0.0.1:5000/api/
 func gps_from_pluscode(pluscode):
-	const api_base_url_local = 'http://127.0.0.1:5000/api/pc'
+	#const api_base_url_local = 'http://192.168.49.1:5000/api/pc'
+	var api_base_url_local = ip_based_on_device + url_for_pluscode
 	var trimmed_pluscode_space = pluscode.replace(" ", "")
 	var trimmed_pluscode_plus = trimmed_pluscode_space.replace("+", "")
 	var url_pluscode = trimmed_pluscode_plus.insert(8, url_code_for_plus_symbol)
@@ -62,17 +92,21 @@ func ping_once():
 
 #http://127.0.0.1:5000/api/loc?lat=44.08195&lon=-123.11291
 func get_poi_from_api(lat=44.08195, lon=-123.11291):
-	const api_base_url_local = "http://127.0.0.1:5000/api/loc"
+	const api_base_url_local = "http://192.168.49.1:5000/api/loc"
+	var base_url = ip_based_on_device + url_for_location
 	var query_parameters = "?lat=" + str(lat) + "&lon=" + str(lon)
-	var full_req_url = api_base_url_local + query_parameters
+	var full_req_url = base_url + query_parameters
 	print('full req url was: ', full_req_url)
+	var debug_text_url_poi = 'full url from get_poi: ' + full_req_url
+	display_debug_text(debug_text_url_poi)
 	#var http_request_poi = HTTPRequest.new()
 	http_request_node.request(full_req_url)
 	var response = await http_request_node.request_completed
 	print('response was: ', response)
 	var body = response[3]
 	var body_string = body.get_string_from_utf8()
-	
+	if response[1] != 200:
+		return [[0,0]]
 	return JSON.parse_string(body_string)
 
 func get_more_pois(previous_pc, current_pc):
@@ -81,6 +115,10 @@ func get_more_pois(previous_pc, current_pc):
 
 func test_gen_dots(cell8 = null, gridSize = null):
 	print('poi coords were: ', poi_coords)
+	
+	var debug_text_poi_coord = 'poi coords from test_gen_dots was: ' + str(poi_coords)
+	display_debug_text(debug_text_poi_coord)
+	
 	var pluscodes_to_display = []
 	#for point in test_coords:
 	for point in poi_coords:
@@ -194,11 +232,12 @@ func get_new_stuff():
 		make_dummy_req()
 
 func add_new_resources():
+	display_debug_text('add_new_resources called')
 	var current_gps_coords = await gps_from_pluscode(PraxisCore.currentPlusCode)
 	var lat = current_gps_coords[0]
 	var lon = current_gps_coords[1]
 	print('add new resources to db')
-	const base_url = "http://127.0.0.1:5000/api/db/add-resources"
+	const base_url = "http://192.168.49.1:5000/api/db/add-resources"
 	var query_parameters = "?lat=" + str(lat) + "&lon=" + str(lon)
 	var full_url = base_url + query_parameters
 	http_request_node.request(full_url)
@@ -206,7 +245,7 @@ func add_new_resources():
 	print('response: ', response)
 
 func make_dummy_req():
-	const url = "http://127.0.0.1:5000/api/dummy"
+	const url = "http://192.168.49.1:5000/api/dummy"
 	http_request_node.request(url)
 	var response = await http_request_node.request_completed
 	print('response was: ', response)
@@ -234,6 +273,20 @@ func MakeAreaNode(cell8, gridSize):
 			results.append(colorRect)
 	return results
 			
+func toggle_debug():
+	print('show debug')
+	if debug_text_box.visible:
+		debug_text_box.hide()
+	else:
+		debug_text_box.show()
+
+func display_debug_text(text):
+	debug_text.text += '\n'
+	debug_text.text += text
+	
+	
+	
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass

@@ -1,0 +1,10 @@
+Basic:
+	make base url/ip a const
+	*Add debug text to app
+	Error handling for http req's
+
+
+
+Eventually:
+	Different map graphics
+	
