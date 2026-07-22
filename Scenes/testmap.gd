@@ -92,8 +92,13 @@ func ping_once():
 
 #http://127.0.0.1:5000/api/loc?lat=44.08195&lon=-123.11291
 func get_poi_from_api(lat=44.08195, lon=-123.11291):
+	var current_pc = PraxisCore.currentPlusCode
+	print('current pc: ', current_pc)
+	var current_gps_coords = await gps_from_pluscode(current_pc)
 	const api_base_url_local = "http://192.168.49.1:5000/api/loc"
 	var base_url = ip_based_on_device + url_for_location
+	lat = current_gps_coords[0]
+	lon = current_gps_coords[1]
 	var query_parameters = "?lat=" + str(lat) + "&lon=" + str(lon)
 	var full_req_url = base_url + query_parameters
 	print('full req url was: ', full_req_url)

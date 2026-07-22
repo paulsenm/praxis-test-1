@@ -277,6 +277,15 @@ offset_right = 797.0
 offset_bottom = 673.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "asdf"
+autowrap_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="DebugTextBox" unique_id=130194523]
+layout_mode = 0
+offset_left = -2.0
+offset_top = -16.0
+offset_right = 796.0
+offset_bottom = 669.0
+text = "bla bla"
 
 [connection signal="pressed" from="CanvasLayer/Control/BottomMenu/InventoryButton" to="." method="display_inventory"]
 [connection signal="pressed" from="CanvasLayer/Control/BottomMenu/InventoryButtonHide" to="." method="hide_inventory"]
